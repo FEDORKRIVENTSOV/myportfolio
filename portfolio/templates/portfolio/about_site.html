@@ -1,0 +1,41 @@
+{% extends "portfolio/base.html" %}
+
+{% block title %}Как устроен этот сайт — {{ site.owner_name }}{% endblock %}
+
+{% block content %}
+<section class="about-site wrap">
+    <a href="{% url 'portfolio:home' %}" class="back-link">← На главную</a>
+    <h1>Кстати, этот сайт — тоже пет-проект</h1>
+    <p class="about-site__lead">
+        Это портфолио, которое вы сейчас листаете, само является одним из
+        пет-проектов.
+    </p>
+
+    <div class="about-site__grid">
+        <div class="about-site__block">
+            <h3>Стек</h3>
+            <ul>
+                <li>Backend - Django 5</li>
+                <li>База данных - SQLite (легко заменить на PostgreSQL)</li>
+                <li>Фронтенд - чистые HTML / CSS / JS, без фреймворков</li>
+                <li>Все тексты, картинки и проекты редактируются через админку</li>
+            </ul>
+        </div>
+        <div class="about-site__block">
+            <h3>Что настраивается без кода</h3>
+            <ul>
+                <li>Имя, роль, текст хиро-блока и раздел «обо мне»</li>
+                <li>Ссылки на соцсети и резюме</li>
+                <li>Любое количество проектов с тегами, галереей, кодом и фактами</li>
+                <li>Три забавные цифры в статистике</li>
+                <li>Секретное сообщение пасхалки</li>
+            </ul>
+        </div>
+    </div>
+
+    <p class="about-site__note">
+        Исходники лежат рядом - заходи в
+        <code>portfolio/models.py</code>, если понадобится что-то добавить.
+    </p>
+</section>
+{% endblock %}

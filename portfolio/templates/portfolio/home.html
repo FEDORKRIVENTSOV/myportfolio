@@ -1,0 +1,112 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="hero wrap">
+    <p class="hero__eyebrow" data-anim="hero">Портфолио</p>
+    <h1 class="hero__title" data-anim="hero">
+        Привет, я <span class="hero__name">{{ site.owner_name }}</span>.<br>
+        {{ site.role_title }}.
+    </h1>
+    <p class="hero__tagline" data-anim="hero">{{ site.hero_tagline }}</p>
+    <div class="hero__actions" data-anim="hero">
+        <a href="#projects" class="btn btn--primary">Смотреть проекты</a>
+        {% if site.resume_file %}
+            <a href="{{ site.resume_file.url }}" class="btn btn--ghost" target="_blank" rel="noopener">Скачать резюме</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="stats wrap" aria-label="Забавная статистика">
+    <div class="stats__item">
+        <span class="stats__value">{{ site.stat1_value }}</span>
+        <span class="stats__label">{{ site.stat1_label }}</span>
+    </div>
+    <div class="stats__item">
+        <span class="stats__value">{{ site.stat2_value }}</span>
+        <span class="stats__label">{{ site.stat2_label }}</span>
+    </div>
+    <div class="stats__item">
+        <span class="stats__value">{{ site.stat3_value }}</span>
+        <span class="stats__label">{{ site.stat3_label }}</span>
+    </div>
+</section>
+
+<section class="projects wrap" id="projects">
+    <div class="projects__head">
+        <h2>Проекты</h2>
+        <div class="filter-tabs" role="tablist" aria-label="Фильтр проектов по категории">
+            <button class="filter-tabs__btn is-active" data-filter="all" role="tab" aria-selected="true">
+                Все <span class="filter-tabs__count">{{ projects|length }}</span>
+            </button>
+            <button class="filter-tabs__btn" data-filter="dev" role="tab" aria-selected="false">
+                Разработка <span class="filter-tabs__count">{{ dev_count }}</span>
+            </button>
+            <button class="filter-tabs__btn" data-filter="design" role="tab" aria-selected="false">
+                Дизайн <span class="filter-tabs__count">{{ design_count }}</span>
+            </button>
+        </div>
+    </div>
+
+    {% if projects %}
+    <div class="cards-grid">
+        {% for project in projects %}
+        <a href="{{ project.get_absolute_url }}" class="card" data-category="{{ project.category }}" style="--i: {{ forloop.counter0 }};">
+            <div class="card__image-wrap">
+                <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="card__image" loading="lazy">
+                {% if project.is_featured %}<span class="card__badge">★ избранное</span>{% endif %}
+                <span class="card__category card__category--{{ project.category }}">
+                    {% if project.category == 'dev' %}Разработка{% else %}Дизайн{% endif %}
+                </span>
+            </div>
+            <div class="card__body">
+                <h3 class="card__title">{{ project.title }}</h3>
+                <p class="card__desc">{{ project.short_description }}</p>
+                {% if project.tags.all %}
+                <div class="card__tags">
+                    {% for tag in project.tags.all|slice:":4" %}
+                        <span class="chip">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <span class="card__arrow" aria-hidden="true">→</span>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Проектов пока нет - самое время добавить первый в
+            <a href="/admin/portfolio/project/add/">админке</a>.</p>
+    </div>
+    {% endif %}
+</section>
+
+<section class="about wrap" id="about">
+    <div class="about__avatar-col">
+        {% if site.avatar %}
+            <img src="{{ site.avatar.url }}" alt="{{ site.owner_name }}" class="about__avatar">
+        {% else %}
+            <div class="about__avatar about__avatar--placeholder">{{ site.owner_name|first }}</div>
+        {% endif %}
+    </div>
+    <div class="about__text-col">
+        <h2>Обо мне</h2>
+        {% for paragraph in site.about_text.splitlines %}
+            {% if paragraph %}<p>{{ paragraph }}</p>{% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="contact wrap" id="contact">
+    <h2>Свяжемся?</h2>
+    <p>Открыт к предложениям, интересным задачам.</p>
+    <div class="contact__links">
+        {% if site.email %}<a href="mailto:{{ site.email }}" class="btn btn--primary">Написать на почту</a>{% endif %}
+        {% if site.telegram_url %}<a href="{{ site.telegram_url }}" target="_blank" rel="noopener" class="btn btn--ghost">Telegram</a>{% endif %}
+        {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost">GitHub</a>{% endif %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+
+{% block title %}{{ project.title }} — {{ site.owner_name }}{% endblock %}
+
+{% block content %}
+
+<article class="project">
+
+    <div class="project__hero wrap">
+        <a href="{% url 'portfolio:home' %}#projects" class="back-link">← Все проекты</a>
+        <span class="card__category card__category--{{ project.category }}">
+            {% if project.category == 'dev' %}Разработка{% else %}Дизайн{% endif %}
+        </span>
+        <h1 class="project__title">{{ project.title }}</h1>
+        <p class="project__short">{{ project.short_description }}</p>
+
+        <div class="project__meta">
+            {% if project.year %}<span>{{ project.year }}</span>{% endif %}
+            {% if project.tags.all %}
+                <div class="project__tags">
+                    {% for tag in project.tags.all %}<span class="chip">{{ tag.name }}</span>{% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="project__actions">
+            {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn btn--primary">Открыть демо</a>{% endif %}
+            {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost">Код на GitHub</a>{% endif %}
+        </div>
+
+        <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="project__cover">
+    </div>
+
+    <div class="project__body wrap">
+
+        <div class="project__main">
+            <section class="project__section">
+                <h2>О проекте</h2>
+                {% for paragraph in project.description_paragraphs %}
+                    <p>{{ paragraph }}</p>
+                {% endfor %}
+            </section>
+
+            {% if project.snippets.all %}
+            <section class="project__section">
+                <h2>Код</h2>
+                <div class="snippets">
+                    {% for snippet in project.snippets.all %}
+                    <div class="snippet">
+                        <div class="snippet__head">
+                            <span class="snippet__title">{{ snippet.title }}</span>
+                            <span class="snippet__lang">{{ snippet.get_language_display }}</span>
+                            <button class="snippet__copy" type="button" data-copy-target="snippet-{{ forloop.counter }}">Копировать</button>
+                        </div>
+                        <pre class="snippet__code" id="snippet-{{ forloop.counter }}"><code>{{ snippet.code }}</code></pre>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if project.images.all %}
+            <section class="project__section">
+                <h2>Галерея</h2>
+                <div class="gallery">
+                    {% for img in project.images.all %}
+                    <figure class="gallery__item">
+                        <img src="{{ img.image.url }}" alt="{{ img.caption }}" loading="lazy">
+                        {% if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}
+                    </figure>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+        </div>
+
+        {% if project.fun_facts.all %}
+        <aside class="project__aside">
+            <h3 class="fun-facts__title">Мини-приколюхи</h3>
+            <ul class="fun-facts">
+                {% for fact in project.fun_facts.all %}
+                <li class="fun-facts__item">
+                    <span class="fun-facts__emoji">{{ fact.emoji }}</span>
+                    <span>{{ fact.text }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+        {% endif %}
+    </div>
+
+    {% if other_projects %}
+    <section class="more-projects wrap">
+        <h2>Другие проекты</h2>
+        <div class="more-projects__grid">
+            {% for p in other_projects %}
+            <a href="{{ p.get_absolute_url }}" class="more-projects__card">
+                <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" loading="lazy">
+                <span>{{ p.title }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</article>
+
+{% endblock %}
