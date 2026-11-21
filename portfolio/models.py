@@ -140,7 +140,7 @@ class Project(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name="Теги / технологии", blank=True, related_name="projects")
 
     github_url = models.URLField("Ссылка на GitHub", blank=True)
-    demo_url = models.URLField("Ссылка на демо / сайт", blank=True)
+    demo_url = models.URLField("Ссылка на демо/сайт", blank=True)
 
     year = models.PositiveIntegerField("Год", blank=True, null=True)
     is_featured = models.BooleanField(
@@ -149,7 +149,7 @@ class Project(models.Model):
     )
     order = models.IntegerField(
         "Порядок", default=0,
-        help_text="Чем меньше число — тем выше проект в списке.",
+        help_text="Чем меньше число - тем выше проект в списке.",
     )
 
     created_at = models.DateTimeField("Создан", auto_now_add=True)
@@ -230,19 +230,18 @@ class CodeSnippet(models.Model):
 
 
 class FunFact(models.Model):
-    """Мини-приколюха про проект: забавный факт, цифра или деталь разработки."""
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="fun_facts")
-    emoji = models.CharField("Эмодзи", max_length=10, default="✨")
+    emoji = models.CharField("Факт", max_length=200, default="")
     text = models.CharField(
         "Текст", max_length=160,
-        help_text='Например: "Переписан с нуля 3 раза" или "97% багов найдены в 2 часа ночи".',
+        help_text='Например: "Автотестов 45".',
     )
     order = models.IntegerField("Порядок", default=0)
 
     class Meta:
-        verbose_name = "Мини-приколюха"
-        verbose_name_plural = "Мини-приколюхи"
+        verbose_name = "Факт"
+        verbose_name_plural = "Факты"
         ordering = ["order", "id"]
 
     def __str__(self):
