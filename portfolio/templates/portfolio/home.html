@@ -4,46 +4,72 @@
 {% block content %}
 
 <section class="hero wrap">
-    <p class="hero__eyebrow" data-anim="hero">Портфолио</p>
-    <h1 class="hero__title" data-anim="hero">
-        Привет, я <span class="hero__name">{{ site.owner_name }}</span>.<br>
-        {{ site.role_title }}.
-    </h1>
-    <p class="hero__tagline" data-anim="hero">{{ site.hero_tagline }}</p>
-    <div class="hero__actions" data-anim="hero">
-        <a href="#projects" class="btn btn--primary">Смотреть проекты</a>
-        {% if site.resume_file %}
-            <a href="{{ site.resume_file.url }}" class="btn btn--ghost" target="_blank" rel="noopener">Скачать резюме</a>
-        {% endif %}
+    <div class="hero__grid">
+        <div class="hero__copy">
+            <p class="section-label hero__eyebrow" data-anim="hero"><span class="section-label__n">/01</span> Портфолио</p>
+            <h1 class="hero__title" data-anim="hero">
+                Привет, я <span class="hero__name">{{ site.owner_name }}</span>.<br>
+                {{ site.role_title }}.
+            </h1>
+            <p class="hero__tagline" data-anim="hero">{{ site.hero_tagline }}</p>
+            <div class="hero__actions" data-anim="hero">
+                <a href="#projects" class="btn btn--primary" data-magnetic>Смотреть проекты</a>
+                {% if site.resume_file %}
+                    <a href="{{ site.resume_file.url }}" class="btn btn--ghost" target="_blank" rel="noopener" data-magnetic>Скачать резюме</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <figure class="hero__viz" data-anim="hero">
+            <canvas id="heroDots" class="hero__canvas" data-glyph="&lt;/&gt;" role="img"
+                    aria-label="Иллюстрация: знак &lt;/&gt;, нарисованный тысячей точек. Знаки загораются по очереди, между ними бегут импульсы света."></canvas>
+            <figcaption class="hero__caption">
+                <span>Иллюстрация</span>
+                <span>наведи курсор на точки · на телефоне — тапни</span>
+            </figcaption>
+        </figure>
     </div>
 </section>
 
-<section class="stats wrap" aria-label="Забавная статистика">
+{% if projects %}
+<div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+        {% for project in projects %}{% for tag in project.tags.all %}<span class="marquee__item">{{ tag.name }}</span><span class="marquee__dot"></span>{% endfor %}{% endfor %}
+        {% for project in projects %}{% for tag in project.tags.all %}<span class="marquee__item">{{ tag.name }}</span><span class="marquee__dot"></span>{% endfor %}{% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<section class="stats wrap" aria-label="Забавная статистика" data-reveal>
     <div class="stats__item">
-        <span class="stats__value">{{ site.stat1_value }}</span>
+        <span class="stats__value"><span class="odo" data-value="{{ site.stat1_value }}">{{ site.stat1_value }}</span></span>
         <span class="stats__label">{{ site.stat1_label }}</span>
     </div>
     <div class="stats__item">
-        <span class="stats__value">{{ site.stat2_value }}</span>
+        <span class="stats__value"><span class="odo" data-value="{{ site.stat2_value }}">{{ site.stat2_value }}</span></span>
         <span class="stats__label">{{ site.stat2_label }}</span>
     </div>
     <div class="stats__item">
-        <span class="stats__value">{{ site.stat3_value }}</span>
+        <span class="stats__value"><span class="odo" data-value="{{ site.stat3_value }}">{{ site.stat3_value }}</span></span>
         <span class="stats__label">{{ site.stat3_label }}</span>
     </div>
 </section>
 
 <section class="projects wrap" id="projects">
-    <div class="projects__head">
-        <h2>Проекты</h2>
+    <div class="projects__head" data-reveal>
+        <div>
+            <p class="section-label"><span class="section-label__n">/02</span> Работы</p>
+            <h2>Проекты</h2>
+        </div>
         <div class="filter-tabs" role="tablist" aria-label="Фильтр проектов по категории">
-            <button class="filter-tabs__btn is-active" data-filter="all" role="tab" aria-selected="true">
+            <span class="filter-tabs__glow" id="filterGlow" aria-hidden="true"></span>
+            <button class="filter-tabs__btn is-active" type="button" data-filter="all" role="tab" aria-selected="true">
                 Все <span class="filter-tabs__count">{{ projects|length }}</span>
             </button>
-            <button class="filter-tabs__btn" data-filter="dev" role="tab" aria-selected="false">
+            <button class="filter-tabs__btn" type="button" data-filter="dev" role="tab" aria-selected="false">
                 Разработка <span class="filter-tabs__count">{{ dev_count }}</span>
             </button>
-            <button class="filter-tabs__btn" data-filter="design" role="tab" aria-selected="false">
+            <button class="filter-tabs__btn" type="button" data-filter="design" role="tab" aria-selected="false">
                 Дизайн <span class="filter-tabs__count">{{ design_count }}</span>
             </button>
         </div>
@@ -52,15 +78,19 @@
     {% if projects %}
     <div class="cards-grid">
         {% for project in projects %}
-        <a href="{{ project.get_absolute_url }}" class="card" data-category="{{ project.category }}" style="--i: {{ forloop.counter0 }};">
+        <a href="{{ project.get_absolute_url }}" class="card" data-category="{{ project.category }}" data-tilt data-reveal style="--i: {{ forloop.counter0 }};">
+            <span class="card__glow" aria-hidden="true"></span>
             <div class="card__image-wrap">
-                <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="card__image" loading="lazy">
+                {% if project.cover_image %}
+                    <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="card__image" loading="lazy">
+                {% endif %}
                 {% if project.is_featured %}<span class="card__badge">★ избранное</span>{% endif %}
                 <span class="card__category card__category--{{ project.category }}">
                     {% if project.category == 'dev' %}Разработка{% else %}Дизайн{% endif %}
                 </span>
             </div>
             <div class="card__body">
+                <span class="card__index">/{{ forloop.counter|stringformat:"02d" }}</span>
                 <h3 class="card__title">{{ project.title }}</h3>
                 <p class="card__desc">{{ project.short_description }}</p>
                 {% if project.tags.all %}
@@ -76,14 +106,30 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="empty-state">
-        <p>Проектов пока нет - самое время добавить первый в
+    <div class="empty-state" data-reveal>
+        <p>Проектов пока нет — самое время добавить первый в
             <a href="/admin/portfolio/project/add/">админке</a>.</p>
     </div>
     {% endif %}
 </section>
 
-<section class="about wrap" id="about">
+{% if year_columns %}
+<section class="timeline wrap" aria-labelledby="timeline-title" data-reveal>
+    <p class="section-label"><span class="section-label__n">/03</span> Ритм</p>
+    <h2 id="timeline-title">Проекты по годам</h2>
+    <div class="dotchart" data-dotchart role="img" aria-label="График: сколько проектов сделано в каждом году">
+        {% for col in year_columns %}
+        <div class="dotchart__col" data-count="{{ col.count }}">
+            <span class="dotchart__n">{% if col.count %}{{ col.count }}{% endif %}</span>
+            <div class="dotchart__stack" aria-hidden="true"></div>
+            <span class="dotchart__year">{{ col.year }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="about wrap" id="about" data-reveal>
     <div class="about__avatar-col">
         {% if site.avatar %}
             <img src="{{ site.avatar.url }}" alt="{{ site.owner_name }}" class="about__avatar">
@@ -92,6 +138,7 @@
         {% endif %}
     </div>
     <div class="about__text-col">
+        <p class="section-label"><span class="section-label__n">/04</span> Знакомство</p>
         <h2>Обо мне</h2>
         {% for paragraph in site.about_text.splitlines %}
             {% if paragraph %}<p>{{ paragraph }}</p>{% endif %}
@@ -99,13 +146,14 @@
     </div>
 </section>
 
-<section class="contact wrap" id="contact">
+<section class="contact wrap" id="contact" data-reveal>
+    <p class="section-label"><span class="section-label__n">/05</span> Контакты</p>
     <h2>Свяжемся?</h2>
-    <p>Открыт к предложениям, интересным задачам.</p>
+    <p>Открыт(а) к предложениям, интересным задачам и просто поговорить про код или дизайн.</p>
     <div class="contact__links">
-        {% if site.email %}<a href="mailto:{{ site.email }}" class="btn btn--primary">Написать на почту</a>{% endif %}
-        {% if site.telegram_url %}<a href="{{ site.telegram_url }}" target="_blank" rel="noopener" class="btn btn--ghost">Telegram</a>{% endif %}
-        {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost">GitHub</a>{% endif %}
+        {% if site.email %}<a href="mailto:{{ site.email }}" class="btn btn--primary" data-magnetic>Написать на почту</a>{% endif %}
+        {% if site.telegram_url %}<a href="{{ site.telegram_url }}" target="_blank" rel="noopener" class="btn btn--ghost" data-magnetic>Telegram</a>{% endif %}
+        {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost" data-magnetic>GitHub</a>{% endif %}
     </div>
 </section>
 

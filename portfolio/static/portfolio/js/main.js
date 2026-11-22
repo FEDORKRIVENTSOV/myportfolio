@@ -63,6 +63,18 @@ safe("scrollProgress", () => {
 
 
 // ============================================================================
+// Шапка: появляется тень, когда страница прокручена
+// ============================================================================
+safe("headerShadow", () => {
+    const header = document.querySelector(".site-header");
+    if (!header) return;
+    const update = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+});
+
+
+// ============================================================================
 // Плавное проявление блоков при скролле
 // ============================================================================
 safe("scrollReveal", () => {
@@ -269,9 +281,9 @@ safe("heroDots", () => {
             let alpha = d.on ? 0.3 + 0.55 * g : 0.16;
             let radius = d.on ? 1.7 + 1.1 * g : 1.05;
             // базовый цвет: серо-голубой -> синий по мере «загорания»; пустые точки серые
-            let cr = d.on ? 148 - 111 * g : 100;
-            let cg = d.on ? 163 - 64 * g : 116;
-            let cb = d.on ? 200 + 35 * g : 139;
+            let cr = d.on ? 150 - 107 * g : 100;
+            let cg = d.on ? 170 - 63 * g : 116;
+            let cb = d.on ? 215 + 40 * g : 139;
 
             if (pulse) {
                 const dx = x - pulse.x;
@@ -306,7 +318,7 @@ safe("heroDots", () => {
                     const m = 1 - dist / 110;
                     x += (dx / dist) * m * 8;
                     y += (dy / dist) * m * 8;
-                    cr += (37 - cr) * m; cg += (99 - cg) * m; cb += (235 - cb) * m;
+                    cr += (43 - cr) * m; cg += (107 - cg) * m; cb += (255 - cb) * m;
                     alpha += m * 0.6;
                     radius += m * 1.8;
                 }
@@ -491,7 +503,7 @@ safe("dotChart", () => {
 safe("tilt", () => {
     if (!hasFinePointer || prefersReducedMotion) return;
 
-    const MAX_TILT = 8;
+    const MAX_TILT = 4;
     document.querySelectorAll("[data-tilt]").forEach((el) => {
         let resetTimer = 0;
 
@@ -1020,7 +1032,7 @@ safe("konami", () => {
 
     function spawnConfetti() {
         if (prefersReducedMotion) return;
-        const colors = ["#2563EB", "#3B82F6", "#60A5FA", "#F59E0B", "#0F172A"];
+        const colors = ["#2B6BFF", "#5B8CFF", "#93B4FF", "#F59E0B", "#0B1B32"];
         for (let i = 0; i < 36; i += 1) {
             const piece = document.createElement("span");
             const color = colors[i % colors.length];
