@@ -266,12 +266,12 @@ safe("heroDots", () => {
             let x = d.x;
             let y = d.y;
             const g = d.region >= 0 ? glow[d.region] : 0;
-            let alpha = d.on ? 0.32 + 0.5 * g : 0.07;
+            let alpha = d.on ? 0.3 + 0.55 * g : 0.16;
             let radius = d.on ? 1.7 + 1.1 * g : 1.05;
-            // базовый цвет: фиолетовый -> розовый по мере «загорания»; пустые точки белёсые
-            let cr = d.on ? 155 + 100 * g : 255;
-            let cg = d.on ? 77 - 31 * g : 255;
-            let cb = d.on ? 255 - 109 * g : 255;
+            // базовый цвет: серо-голубой -> синий по мере «загорания»; пустые точки серые
+            let cr = d.on ? 148 - 111 * g : 100;
+            let cg = d.on ? 163 - 64 * g : 116;
+            let cb = d.on ? 200 + 35 * g : 139;
 
             if (pulse) {
                 const dx = x - pulse.x;
@@ -279,7 +279,7 @@ safe("heroDots", () => {
                 const dd = dx * dx + dy * dy;
                 if (dd < 2500) {
                     const k = 1 - Math.sqrt(dd) / 50;
-                    cr += (255 - cr) * k; cg += (213 - cg) * k; cb += (107 - cb) * k;
+                    cr += (15 - cr) * k; cg += (23 - cg) * k; cb += (42 - cb) * k;
                     alpha += k * 0.6;
                     radius += k * 1.5;
                 }
@@ -291,7 +291,7 @@ safe("heroDots", () => {
                 const diff = Math.abs(Math.hypot(d.x - rp.x, d.y - rp.y) - age * 0.28);
                 if (diff < 16) {
                     const k = (1 - diff / 16) * (1 - age / 1400);
-                    cr += (255 - cr) * k; cg += (213 - cg) * k; cb += (107 - cb) * k;
+                    cr += (15 - cr) * k; cg += (23 - cg) * k; cb += (42 - cb) * k;
                     alpha += k * 0.7;
                     radius += k * 1.6;
                 }
@@ -306,7 +306,7 @@ safe("heroDots", () => {
                     const m = 1 - dist / 110;
                     x += (dx / dist) * m * 8;
                     y += (dy / dist) * m * 8;
-                    cr += (255 - cr) * m; cg += (160 - cg) * m; cb += (215 - cb) * m;
+                    cr += (37 - cr) * m; cg += (99 - cg) * m; cb += (235 - cb) * m;
                     alpha += m * 0.6;
                     radius += m * 1.8;
                 }
@@ -1020,7 +1020,7 @@ safe("konami", () => {
 
     function spawnConfetti() {
         if (prefersReducedMotion) return;
-        const colors = ["#FF2E92", "#9B4DFF", "#FF7AC0", "#FFD56B", "#C79CFF"];
+        const colors = ["#2563EB", "#3B82F6", "#60A5FA", "#F59E0B", "#0F172A"];
         for (let i = 0; i < 36; i += 1) {
             const piece = document.createElement("span");
             const color = colors[i % colors.length];
@@ -1032,7 +1032,7 @@ safe("konami", () => {
                 height: "8px",
                 borderRadius: "50%", // конфетти-точки в тему
                 background: color,
-                boxShadow: "0 0 8px " + color,
+                boxShadow: "none",
                 zIndex: "600",
                 pointerEvents: "none",
                 transition: "transform 1.7s ease-in, opacity 1.7s ease-in",
