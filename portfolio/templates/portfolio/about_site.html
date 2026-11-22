@@ -5,19 +5,19 @@
 {% block content %}
 <section class="about-site wrap">
     <a href="{% url 'portfolio:home' %}" class="back-link">← На главную</a>
-    <h1>Кстати, этот сайт — тоже пет-проект</h1>
-    <p class="about-site__lead">
-        Это портфолио, которое вы сейчас листаете, само является одним из
-        пет-проектов.
+    <h1 data-anim="hero">Кстати, этот сайт — тоже пет-проект</h1>
+    <p class="about-site__lead" data-anim="hero">
+        Да, портфолио, которое ты сейчас листаешь, само является одним из
+        пет-проектов. Мета настолько, насколько это вообще возможно.
     </p>
 
-    <div class="about-site__grid">
+    <div class="about-site__grid" data-reveal>
         <div class="about-site__block">
             <h3>Стек</h3>
             <ul>
-                <li>Backend - Django 5</li>
-                <li>База данных - SQLite (легко заменить на PostgreSQL)</li>
-                <li>Фронтенд - чистые HTML / CSS / JS, без фреймворков</li>
+                <li>Backend — Django 5</li>
+                <li>База данных — SQLite (легко заменить на PostgreSQL)</li>
+                <li>Фронтенд — чистые HTML / CSS / JS, без фреймворков</li>
                 <li>Все тексты, картинки и проекты редактируются через админку</li>
             </ul>
         </div>
@@ -26,16 +26,16 @@
             <ul>
                 <li>Имя, роль, текст хиро-блока и раздел «обо мне»</li>
                 <li>Ссылки на соцсети и резюме</li>
-                <li>Любое количество проектов с тегами, галереей, кодом и фактами</li>
+                <li>Любое количество проектов с тегами, галереей и кодом</li>
                 <li>Три забавные цифры в статистике</li>
                 <li>Секретное сообщение пасхалки</li>
             </ul>
         </div>
     </div>
 
-    <p class="about-site__note">
-        Исходники лежат рядом - заходи в
-        <code>portfolio/models.py</code>, если понадобится что-то добавить.
+    <p class="about-site__note" data-reveal>
+        Хочешь так же? Исходники лежат рядом — заходи в
+        <code>portfolio/models.py</code>, если понадобится что-то докрутить.
     </p>
 </section>
 {% endblock %}

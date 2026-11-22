@@ -1,3 +1,6 @@
+from collections import Counter
+from datetime import date
+
 from django.views.generic import DetailView, ListView, TemplateView
 
 from .models import Project
@@ -20,11 +23,20 @@ class HomeView(ListView):
         ctx = super().get_context_data(**kwargs)
         ctx["dev_count"] = sum(1 for p in ctx["projects"] if p.category == Project.CATEGORY_DEV)
         ctx["design_count"] = sum(1 for p in ctx["projects"] if p.category == Project.CATEGORY_DESIGN)
+
+        # Данные для точечного графика «проекты по годам»: последние ≤12 лет.
+        years = Counter(p.year for p in ctx["projects"] if p.year)
+        if years:
+            last = max(max(years), date.today().year)
+            first = max(min(min(years), last - 4), last - 11)
+            ctx["year_columns"] = [
+                {"year": y, "count": years.get(y, 0)} for y in range(first, last + 1)
+            ]
         return ctx
 
 
 class ProjectDetailView(DetailView):
-    """Страница одного проекта: галерея, код, мини-факты."""
+    """Страница одного проекта: галерея, код."""
 
     model = Project
     template_name = "portfolio/project_detail.html"
@@ -33,7 +45,7 @@ class ProjectDetailView(DetailView):
     def get_queryset(self):
         return (
             Project.objects.all()
-            .prefetch_related("tags", "images", "snippets", "fun_facts")
+            .prefetch_related("tags", "images", "snippets")
         )
 
     def get_context_data(self, **kwargs):

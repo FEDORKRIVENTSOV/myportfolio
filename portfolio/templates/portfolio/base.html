@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0B0611">
     <title>{% block title %}{{ site.owner_name }} — {{ site.role_title }}{% endblock %}</title>
     <meta name="description" content="{{ site.hero_tagline }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <script>document.documentElement.classList.add("js");</script>
     <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
-    <link rel="icon" type="img/png" href="{% static 'img/favicon.png' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 font-size=%2290%22>💖</text></svg>">
 </head>
 <body>
 
-<div class="noise-overlay" aria-hidden="true"></div>
+<!-- Прогресс-бар скролла -->
+<div class="scroll-progress" aria-hidden="true"><span id="scrollProgressBar"></span></div>
+
+<!-- Фон: сетка точек (светится у курсора) и два мягких неоновых пятна -->
+<div class="bg-scene" aria-hidden="true">
+    <span class="blob blob--1"></span>
+    <span class="blob blob--2"></span>
+    <div class="bg-dots"></div>
+    <div class="bg-dots bg-dots--glow"></div>
+</div>
+
+<a href="#content" class="skip-link">К содержимому</a>
 
 <header class="site-header">
     <div class="wrap site-header__inner">
@@ -23,18 +36,21 @@
             <span class="brand__mark">&lt;/&gt;</span>
             <span class="brand__name">{{ site.owner_name }}</span>
         </a>
-        <nav class="site-nav">
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="siteNav">
+            <span class="nav-toggle__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </button>
+        <nav class="site-nav" id="siteNav" aria-label="Основное меню">
             <a href="{% url 'portfolio:home' %}#projects">Проекты</a>
             <a href="{% url 'portfolio:home' %}#about">Обо мне</a>
             {% if site.resume_file %}
                 <a href="{{ site.resume_file.url }}" target="_blank" rel="noopener">Резюме</a>
             {% endif %}
-            <a href="{% url 'portfolio:home' %}#contact" class="site-nav__cta">Связаться</a>
+            <a href="{% url 'portfolio:home' %}#contact" class="site-nav__cta" data-magnetic>Связаться</a>
         </nav>
     </div>
 </header>
 
-<main>
+<main id="content">
     {% block content %}{% endblock %}
 </main>
 

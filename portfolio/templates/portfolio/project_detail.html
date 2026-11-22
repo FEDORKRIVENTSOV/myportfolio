@@ -9,13 +9,13 @@
 
     <div class="project__hero wrap">
         <a href="{% url 'portfolio:home' %}#projects" class="back-link">← Все проекты</a>
-        <span class="card__category card__category--{{ project.category }}">
+        <span class="project__badge project__badge--{{ project.category }}">
             {% if project.category == 'dev' %}Разработка{% else %}Дизайн{% endif %}
         </span>
-        <h1 class="project__title">{{ project.title }}</h1>
-        <p class="project__short">{{ project.short_description }}</p>
+        <h1 class="project__title" data-anim="hero">{{ project.title }}</h1>
+        <p class="project__short" data-anim="hero">{{ project.short_description }}</p>
 
-        <div class="project__meta">
+        <div class="project__meta" data-anim="hero">
             {% if project.year %}<span>{{ project.year }}</span>{% endif %}
             {% if project.tags.all %}
                 <div class="project__tags">
@@ -24,18 +24,25 @@
             {% endif %}
         </div>
 
-        <div class="project__actions">
-            {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn btn--primary">Открыть демо</a>{% endif %}
-            {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost">Код на GitHub</a>{% endif %}
+        <div class="project__actions" data-anim="hero">
+            {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn btn--primary" data-magnetic>Открыть демо</a>{% endif %}
+            {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank" rel="noopener" class="btn btn--ghost" data-magnetic>Код на GitHub</a>{% endif %}
         </div>
 
-        <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="project__cover">
+        {% if project.cover_image %}
+        <div class="project__cover-frame" data-reveal>
+            <a href="{{ project.cover_image.url }}" class="project__cover-link" data-lightbox="project" data-caption="{{ project.title }}" aria-label="Открыть обложку на весь экран">
+                <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="project__cover">
+            </a>
+        </div>
+        {% endif %}
     </div>
 
     <div class="project__body wrap">
 
         <div class="project__main">
-            <section class="project__section">
+            <section class="project__section" data-reveal>
+                <p class="section-label"><span class="section-label__n">/01</span> Описание</p>
                 <h2>О проекте</h2>
                 {% for paragraph in project.description_paragraphs %}
                     <p>{{ paragraph }}</p>
@@ -43,7 +50,7 @@
             </section>
 
             {% if project.snippets.all %}
-            <section class="project__section">
+            <section class="project__section" data-reveal>
                 <h2>Код</h2>
                 <div class="snippets">
                     {% for snippet in project.snippets.all %}
@@ -61,12 +68,14 @@
             {% endif %}
 
             {% if project.images.all %}
-            <section class="project__section">
+            <section class="project__section" data-reveal>
                 <h2>Галерея</h2>
                 <div class="gallery">
                     {% for img in project.images.all %}
-                    <figure class="gallery__item">
-                        <img src="{{ img.image.url }}" alt="{{ img.caption }}" loading="lazy">
+                    <figure class="gallery__item" data-tilt>
+                        <a href="{{ img.image.url }}" class="gallery__link" data-lightbox="project" data-caption="{{ img.caption }}" aria-label="Открыть фото на весь экран{% if img.caption %}: {{ img.caption }}{% endif %}">
+                            <img src="{{ img.image.url }}" alt="{{ img.caption }}" loading="lazy">
+                        </a>
                         {% if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}
                     </figure>
                     {% endfor %}
@@ -75,28 +84,16 @@
             {% endif %}
         </div>
 
-        {% if project.fun_facts.all %}
-        <aside class="project__aside">
-            <h3 class="fun-facts__title">Мини-приколюхи</h3>
-            <ul class="fun-facts">
-                {% for fact in project.fun_facts.all %}
-                <li class="fun-facts__item">
-                    <span class="fun-facts__emoji">{{ fact.emoji }}</span>
-                    <span>{{ fact.text }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </aside>
-        {% endif %}
     </div>
 
     {% if other_projects %}
-    <section class="more-projects wrap">
+    <section class="more-projects wrap" data-reveal>
+        <p class="section-label"><span class="section-label__n">/→</span> Дальше</p>
         <h2>Другие проекты</h2>
         <div class="more-projects__grid">
             {% for p in other_projects %}
-            <a href="{{ p.get_absolute_url }}" class="more-projects__card">
-                <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" loading="lazy">
+            <a href="{{ p.get_absolute_url }}" class="more-projects__card" data-tilt>
+                {% if p.cover_image %}<img src="{{ p.cover_image.url }}" alt="{{ p.title }}" loading="lazy">{% endif %}
                 <span>{{ p.title }}</span>
             </a>
             {% endfor %}
