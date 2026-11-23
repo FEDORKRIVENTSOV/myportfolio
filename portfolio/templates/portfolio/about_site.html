@@ -1,23 +1,23 @@
 {% extends "portfolio/base.html" %}
 
-{% block title %}Как устроен этот сайт — {{ site.owner_name }}{% endblock %}
+{% block title %}Как устроен этот сайт - {{ site.owner_name }}{% endblock %}
 
 {% block content %}
 <section class="about-site wrap">
     <a href="{% url 'portfolio:home' %}" class="back-link">← На главную</a>
-    <h1 data-anim="hero">Кстати, этот сайт — тоже пет-проект</h1>
+    <h1 data-anim="hero">Кстати, этот сайт - тоже пет-проект</h1>
     <p class="about-site__lead" data-anim="hero">
-        Да, портфолио, которое ты сейчас листаешь, само является одним из
-        пет-проектов. Мета настолько, насколько это вообще возможно.
+        Портфолио, которое вы сейчас листаете, само является одним из
+        пет-проектов. Удобно и понятно.
     </p>
 
     <div class="about-site__grid" data-reveal>
         <div class="about-site__block">
             <h3>Стек</h3>
             <ul>
-                <li>Backend — Django 5</li>
-                <li>База данных — SQLite (легко заменить на PostgreSQL)</li>
-                <li>Фронтенд — чистые HTML / CSS / JS, без фреймворков</li>
+                <li>Backend - Django 5</li>
+                <li>База данных - SQLite (легко заменить на PostgreSQL)</li>
+                <li>Фронтенд - чистые HTML / CSS / JS, без фреймворков</li>
                 <li>Все тексты, картинки и проекты редактируются через админку</li>
             </ul>
         </div>
@@ -34,7 +34,7 @@
     </div>
 
     <p class="about-site__note" data-reveal>
-        Хочешь так же? Исходники лежат рядом — заходи в
+        Если понравился сайт? Исходники лежат рядом — заходи в
         <code>portfolio/models.py</code>, если понадобится что-то докрутить.
     </p>
 </section>
